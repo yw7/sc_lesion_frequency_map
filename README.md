@@ -83,12 +83,12 @@ For the following dataset:
 
 - Download (or `git clone`) this repository:
 ~~~
-git clone https://github.com/yw7/lesion_frequency_map_with_sct.git
+git clone https://github.com/yw7/sc_lesion_frequency_map.git
 ~~~
 
 - Add executable permissions:
 ~~~
-chmod +x lesion_frequency_map_with_sct/make_lfm.sh
+chmod +x sc_lesion_frequency_map/make_lfm.sh
 ~~~
 
 - Make `subjects_all.txt` (You can edit this file to make LFM for subgroup of subjects):
@@ -100,16 +100,16 @@ ls some_study/output/data_processed > some_study/subjects_all.txt
   - Make LFM for Spinal Cord level C1 to C7.
   - Do not mask to the area covered by all subjects (If some template voxel cover by some subjects it's value in the LFM will be the lesion frequency among those subjects).
 ~~~
-lesion_frequency_map_with_sct/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_all.nii.gz -i t2 -m 0 -a 1 -b 7
+sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_all.nii.gz -i t2 -m 0 -a 1 -b 7
 ~~~
 
 ## More Examples
 Without overwriting previous analysis (For cases when running the script multiple time with overlaping groups, do not transform segmentations to template again):
 ~~~
-lesion_frequency_map_with_sct/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -a 1 -b 7 -r 0
+sc_lesion_frequency_map/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -a 1 -b 7 -r 0
 ~~~
 If the files are in subject's folder (not in 'anat' folder).
 ~~~
-lesion_frequency_map_with_sct/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -d . -f "" -m 0 -r 0 -a 1 -b 7
+sc_lesion_frequency_map/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -d . -f "" -m 0 -r 0 -a 1 -b 7
 ~~~
 
