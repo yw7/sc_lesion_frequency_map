@@ -52,7 +52,7 @@ make_lfm.sh \
     [-w <Warping fields to template space file suffix pattern. default: ".*?warp_anat2template">] \
     [-o <Output LFM file. default: "LFM.nii.gz">] \
     [-r <Overwrite (0/1). If 1, the analisis will run again even if files exist. default: 1>] \
-    [-m <Mask the result to spinal cord area covered by all subjects (0/1). default: 1>] \
+    [-m <Set all spinal cord area wich is not covered by all subject's cord segmentation to 0 (0/1). default: 1>] \
     [-t <Template prefix. default: "${SCT_DIR}/data/PAM50/template/PAM50_">] \
     [-a <Min level of sponal cord to be in result. default: 1 (C1)>] \
     [-b <Max level of sponal cord to be in result. default: 20 (T12)>]
@@ -96,20 +96,22 @@ chmod +x sc_lesion_frequency_map/make_lfm.sh
 ls some_study/output/data_processed > some_study/subjects_all.txt
 ~~~
 
-- Run the script:
-  - Make LFM for Spinal Cord level C1 to C7.
-  - Do not mask to the area covered by all subjects (If some template voxel cover by some subjects it's value in the LFM will be the lesion frequency among those subjects).
+- Run the script (make LFM for Spinal Cord level C1 to C7):
 ~~~
-sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_all.nii.gz -i t2 -m 0 -a 1 -b 7
+sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_all.nii.gz -i t2 -a 1 -b 7
 ~~~
 
 ## More Examples
+Do not set all spinal cord area wich is not covered by all subject's cord segmentation to 0 (If some template voxel cover by some subjects it's value in the LFM will be the lesion frequency among those subjects):
+~~~
+sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_all.nii.gz -i t2 -m 0 -a 1 -b 7
+~~~
 Without overwriting previous analysis (For cases when running the script multiple time with overlaping groups, do not transform segmentations to template again):
 ~~~
-sc_lesion_frequency_map/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -a 1 -b 7 -r 0
+sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_group1.nii.gz -i t2 -a 1 -b 7 -r 0
 ~~~
-If the files are in subject's folder (not in 'anat' folder).
+If the files are in subject's folder (not in 'anat' folder):
 ~~~
-sc_lesion_frequency_map/make_lfm.sh -d <study_folder>/output/data_processed -s <study_folder>/subjects_group1.txt -o <study_folder>/LFM_group1.nii.gz -i t2 -d . -f "" -m 0 -r 0 -a 1 -b 7
+sc_lesion_frequency_map/make_lfm.sh -d some_study/output/data_processed -s some_study/subjects_all.txt -o some_study/LFM_group1.nii.gz -i t2 -d . -f "" -m 0 -r 0 -a 1 -b 7
 ~~~
 
