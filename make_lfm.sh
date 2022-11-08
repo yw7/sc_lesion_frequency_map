@@ -307,10 +307,8 @@ if [[ ${MASK_TO_COVERAGE} == 1 ]]; then
 
     sct_maths \
         -i "${CORD_SUM}" \
-        -thr ${#LIST_CORD_SEG_TEMPLATE[@]} \
+        -bin $(echo "${#LIST_CORD_SEG_TEMPLATE[@]}-1" | bc) \
         -o "${COVERAGE_MASK}"
-
-    sct_maths -i "${COVERAGE_MASK}" -bin 0 -o "${COVERAGE_MASK}"
 
     sct_maths \
         -i "${OUT_FILE}" \
