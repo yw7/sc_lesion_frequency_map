@@ -14,11 +14,11 @@
 #  for each subject:
 #   Look in subject folder for all cord segmentations.
 #   Look in subject folder for matching warping fields.
-#   Merge all cord segmentations into the template space using the warping fields -
+#   Merge all cord segmentations into the template space using the warping fields (nn interpolation).
 #      create "<subject><cord suffix>_template.nii.gz".
 #   Look in subject folder for all lesions segmentations.
 #   Look in subject folder for matching warping fields.
-#   Merge all lesions segmentations into the template space using the warping fields -
+#   Merge all lesions segmentations into the template space using the warping fields(linear interpolation).
 #      create "<subject><lesions suffix>_template.nii.gz".
 #  Then:
 #   Sum all cord segmentation.
@@ -26,26 +26,33 @@
 #   Generate LFM with sum of all lesions divided by the sum of all cords.
 #
 # Usage:
-#    make_lfm.sh \
-#        -d <Data directory. default: "output/data_processed">.
-#        -s <Subjects file - text file with subjects names, subject per line. default: "subjects.txt">.
-#        -f <Data directory in subject folder. default: "anat">.
-#        -i <Image pattern (Will look also with "${SUBJECT}_" as prefix by default). default: "t2w">.
-#        -l <Lesions segmentation file suffix (Must be a binary map). default: "_lesionseg">.
-#        -c <Spinal cord segmentation file suffix (Must be a binary map). default: "_seg">.
-#        -w <Warping fields to template space file suffix pattern. default: ".*?warp_anat2template">.
-#        -o <Output LFM file. default: "LFM.nii.gz">.
-#        -r <Overwrite (0/1). If 1, the analisis will run again even if files exist. default: 1>.
-#        -m <Mask the result to spinal cord area covered by all subjects (0/1). default: 1>.
-#        -t <Template prefix. default: "${SCT_DIR}/data/PAM50/template/PAM50_">.
-#        -a <Min level of sponal cord to be in result. default: 1 (C1)>.
-#        -b <Max level of sponal cord to be in result. default: 20 (T12)>.
+# make_lfm.sh \
+#     [-d <Data directory. default: "output/data_processed">] \
+#     [-s <Subjects file - text file with subjects names, subject per line. default: "subjects.txt">] \
+#     [-f <Data directory in subject folder. default: "anat">] \
+#     [-i <Image pattern (Will look also with "${SUBJECT}_" as prefix by default). default: "t2w">] \
+#     [-l <Lesions segmentation file suffix (Must be a binary map). default: "_lesionseg">] \
+#     [-c <Spinal cord segmentation file suffix (Must be a binary map). default: "_seg">] \
+#     [-w <Warping fields to template space file suffix pattern. default: ".*?warp_anat2template">] \
+#     [-o <Output LFM file. default: "LFM.nii.gz">] \
+#     [-r <Overwrite (0/1). If 1, the analisis will run again even if files exist. default: 1>] \
+#     [-m <Set all spinal cord area wich is not covered by all subject's cord segmentation to 0 (0/1). default: 1>] \
+#     [-t <Template prefix. default: "${SCT_DIR}/data/PAM50/template/PAM50_">] \
+#     [-a <Min level of sponal cord to be in result. default: 1 (C1)>] \
+#     [-b <Max level of sponal cord to be in result. default: 20 (T12)>]
 #
-# Examples:
-#    make_lfm.sh -i t2_3d_cervical -a 1 -b 7
-#    make_lfm.sh -i t2_3d_cervical -a 1 -b 7 -r 0
-#    make_lfm.sh -i stir_sag_cervical -d . -f "" -m 0 -r 0 -a 1 -b 7
-#
+
+# BASH SETTINGS
+# ======================================================================================================================
+
+# Uncomment for full verbose
+# set -v
+
+# Immediately exit if error
+set -e
+
+# Exit if user presses CTRL+C (Linux) or CMD+C (OSX)
+trap "echo Caught Keyboard Interrupt within script. Exiting now.; exit" INT
 
 # GET PARAMS
 # ======================================================================================================================
@@ -109,18 +116,6 @@ echo "TEMPLATE=${TEMPLATE}"
 echo "LEVEL_MIN=${LEVEL_MIN}"
 echo "LEVEL_MAX=${LEVEL_MAX}"
 echo ""
-
-# BASH SETTINGS
-# ======================================================================================================================
-
-# Uncomment for full verbose
-# set -v
-
-# Immediately exit if error
-set -e
-
-# Exit if user presses CTRL+C (Linux) or CMD+C (OSX)
-trap "echo Caught Keyboard Interrupt within script. Exiting now.; exit" INT
 
 # SCRIPT STARTS HERE
 # ======================================================================================================================
