@@ -310,6 +310,8 @@ if [[ ${MASK_TO_COVERAGE} == 1 ]]; then
         -thr ${#LIST_CORD_SEG_TEMPLATE[@]} \
         -o "${COVERAGE_MASK}"
 
+    sct_maths -i "${COVERAGE_MASK}" -bin 0 -o "${COVERAGE_MASK}"
+
     sct_maths \
         -i "${OUT_FILE}" \
         -mul "${COVERAGE_MASK}" \
